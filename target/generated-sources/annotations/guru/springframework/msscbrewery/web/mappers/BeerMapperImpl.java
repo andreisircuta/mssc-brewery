@@ -5,15 +5,19 @@ import guru.springframework.msscbrewery.domain.Beer.BeerBuilder;
 import guru.springframework.msscbrewery.web.model.BeerDto;
 import guru.springframework.msscbrewery.web.model.BeerDto.BeerDtoBuilder;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2021-03-17T23:14:07+0200",
+    date = "2021-03-17T23:46:08+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.8 (Amazon.com Inc.)"
 )
 @Component
 public class BeerMapperImpl implements BeerMapper {
+
+    @Autowired
+    private DateMapper dateMapper;
 
     @Override
     public BeerDto beerToBeerDto(Beer beer) {
@@ -27,6 +31,8 @@ public class BeerMapperImpl implements BeerMapper {
         beerDto.beerName( beer.getBeerName() );
         beerDto.beerStyle( beer.getBeerStyle() );
         beerDto.upc( beer.getUpc() );
+        beerDto.createdDate( dateMapper.asOffsetDateTime( beer.getCreatedDate() ) );
+        beerDto.lastUpdatedDate( dateMapper.asOffsetDateTime( beer.getLastUpdatedDate() ) );
 
         return beerDto.build();
     }
@@ -43,6 +49,8 @@ public class BeerMapperImpl implements BeerMapper {
         beer.beerName( beerDto.getBeerName() );
         beer.beerStyle( beerDto.getBeerStyle() );
         beer.upc( beerDto.getUpc() );
+        beer.createdDate( dateMapper.asTimestamp( beerDto.getCreatedDate() ) );
+        beer.lastUpdatedDate( dateMapper.asTimestamp( beerDto.getLastUpdatedDate() ) );
 
         return beer.build();
     }
